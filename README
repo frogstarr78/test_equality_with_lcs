@@ -27,9 +27,14 @@ define "Something" do
 end
 
 result in the output:
-      ! !   
-Hello World!
-Hello Bob  !
+
+'      ! !   '
+'Hello World!'
+'Hello Bob  !'
+
+* without the quotes though. 
+  I added them to bring attention
+  to the included whitespace.
 
 == Installation
 
