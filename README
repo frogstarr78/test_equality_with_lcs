@@ -19,7 +19,7 @@ and
 
 *Spec tests*:
 define "Something" do
-  include TestWithLCS::Spec
+  include TestEqualityWithLCS::Spec
 
   it "matches" do
     @string1.should be_equal_with_lcs(@string2)
