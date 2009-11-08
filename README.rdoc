@@ -6,7 +6,7 @@ Let's say you want to test two strings:
 @string1 = "Hello World!"
 @string2 = "Hello Bob!"
 
-'Unit tests:
+*Unit tests*:
 class ClassName < Test::Unit::TestCase
   include TestWithLCS::Unit
 
@@ -16,7 +16,7 @@ class ClassName < Test::Unit::TestCase
 end
 
 and 
-'Spec tests:
+*Spec tests*:
 define "Something" do
   include TestWithLCS::Spec
 
@@ -26,19 +26,17 @@ define "Something" do
 end
 
 result in the output:
-<pre>
-      ! !  
-Hello World!
-Hello Bob  !
-</pre>
+      ! !   <br />
+Hello World!<br />
+Hello Bob  !<br />
 
 == Installation
 
-# Require the gem
-# include the appropriate module for your testing framework
+1. Require the gem
+2. include the appropriate module for your testing framework
 
-** TestWithLCS::Spec for Rspec
-** TestWithLCS::Unit for Test/Unit
+* TestWithLCS::Spec for Rspec
+* TestWithLCS::Unit for Test/Unit
 
 == Note on Patches/Pull Requests
  
