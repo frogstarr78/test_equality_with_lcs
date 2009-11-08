@@ -1,6 +1,41 @@
 = test_equality_with_lcs
 
-Description goes here.
+Compare two strings, or arrays, and get failed results back in an easy to distinguish LCS output.
+
+Let's say you want to test two strings:
+@string1 = "Hello World!"
+@string2 = "Hello Bob!"
+
+'Unit tests:
+class ClassName < Test::Unit::TestCase
+  include TestWithLCS::Unit
+
+  def test_something
+	assert_equal_with_lcs @string1, @string2
+  end
+end
+
+and 
+'Spec tests:
+define "Something" do
+  include TestWithLCS::Spec
+
+  it "matches" do
+    @string1.should be_equal_with_lcs(@string2)
+  end
+end
+
+result in the output:
+      ! !  
+Hello World!
+Hello Bob  !
+
+== Installation
+
+* Require the gem
+* include the appropriate module for your testing framework
+** TestWithLCS::Spec for Rspec
+** TestWithLCS::Unit for Test/Unit
 
 == Note on Patches/Pull Requests
  
