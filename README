@@ -16,6 +16,7 @@ class ClassName < Test::Unit::TestCase
 end
 
 and 
+
 *Spec tests*:
 define "Something" do
   include TestWithLCS::Spec
@@ -26,9 +27,9 @@ define "Something" do
 end
 
 result in the output:
-      ! !   <br />
-Hello World!<br />
-Hello Bob  !<br />
+      ! !   
+Hello World!
+Hello Bob  !
 
 == Installation
 
