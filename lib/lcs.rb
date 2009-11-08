@@ -1,68 +1,9 @@
-require 'diff/lcs'
 require 'pp'
 require 'colored'
 require 'test/unit'
 require 'test/unit/assertions'
 
-module TestWithLCS
-
-  module SharedMethods
-    @@colorize = true
-    def self.included in_class
-      in_class.class.send :define_method, :colorize do
-        @@colorize
-      end
-
-      in_class.class.send :define_method, :colorize= do |color|
-        @@colorize = color
-      end
-    end
-
-    private
-      def message_for_argument_types string1, string2
-        if string1.is_a? String and string2.is_a? String
-          delegating_to_string_generating_method string1, string2
-        elsif string1.is_a? Array and string2.is_a? Array
-          lcs_message(string1, string2)
-        else
-          raise Test::Unit::AssertionFailedError.new("Comparing different types.")
-        end
-      end
-
-    def delegating_to_string_generating_method string1, string2
-      seq1 = string1.split "\n"
-      seq2 = string2.split "\n"
-      messages = []
-      (['']*seq1.size).zip(seq1, seq2).each do |junk, line1, line2|
-        messages << lcs_message("#{line1}", "#{line2}")
-      end
-      messages.join "\n"
-    end
-
-    def lcs_message string1, string2
-      message_array = []
-      Diff::LCS.sdiff string1, string2 do |diff| 
-        action = diff.action == '=' ? ' ' : diff.action
-        case action
-        when '-'
-          color  = :red
-        when '+'
-          color  = :green
-        when '!'
-          color = :magenta
-        else
-          color  = :white
-        end
-        left   = diff.new_element || ' '
-        right  = diff.old_element || ' '
-        message_array << [action, left, right].map {|thing| thing.send(@@colorize ? color : :to_s) }
-      end
-      horizontal_diff_array = message_array.transpose
-      horizontal_messages = horizontal_diff_array.map {|diff| diff.join '' }
-      horizontal_messages.join "\n"
-    end
-  end
-
+module TestEqualityWithLCS
   module Unit
     include SharedMethods
     def assert_equal_with_lcs string1, string2
@@ -76,33 +17,6 @@ module TestWithLCS
       assert_block message do
         string1 == string2
       end
-    end
-  end
-
-  module Spec
-
-    class BeEqualWithLCS
-      include SharedMethods
-      def initialize expected
-        @expected = expected
-      end
-
-      def matches? target
-        @target = target
-        @expected == @target
-      end
-
-      def failure_message_for_should
-        message_for_argument_types @expected, @target
-      end
-
-      def failure_message_for_should_not
-        message_for_argument_types @expected, @target
-      end
-    end
-
-    def be_equal_with_lcs expected
-      BeEqualWithLCS.new expected
     end
   end
 end
@@ -205,59 +119,5 @@ st|
     assert_equal true, self.class.colorize
     self.class.colorize = false
     assert_equal false, self.class.colorize
-  end
-end
-
-
-require 'spec'
-
-Spec::Runner.configure do |config|
-#  config.mock_with :rspec
-  config.mock_with :mocha
-end
-
-describe "Spec" do
-  include TestWithLCS::Spec
-
-  it "passes" do
-    'actual'.should be_equal_with_lcs('actual')
-  end
-
-  it "doesn't pass" do
-    'actual'.should_not be_equal_with_lcs('something else so this test will fail and we can test the resulting string')
-  end
-
-  it "get's correct output" do
-    self.class.colorize = false
-    # careful of the whitespace required here.
-    expected_error = "---------------------------------- ---------- --- ----------- + -----------
-                                  a          c   t           ual           
-something else so this test will fail and we can test the resu lting string"
-    lambda{ 
-      'actual'.should be_equal_with_lcs('something else so this test will fail and we can test the resulting string')
-    }.should raise_error(Spec::Expectations::ExpectationNotMetError, expected_error)
-  end
-
-  it "get's correct output with multi-line string comparison" do
-    self.class.colorize = false
-    # careful of the whitespace required here.
-    seq1 = "actual
-ly
-I
-didn't want it all
-on one
-line"
-    seq2 = "actually I did want it on ...
-well a couple lines."
-
-    expected_error = "      -----------------------
-actual                       
-actually I did want it on ...
--- !----------------
-  ly                
-well a couple lines."
-    lambda{ 
-      seq1.should be_equal_with_lcs(seq2)
-    }.should raise_error(Spec::Expectations::ExpectationNotMetError, expected_error)
   end
 end
