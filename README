@@ -39,6 +39,7 @@ result in the output:
 == Dependencies
 
 diff-lcs ( http://rubyforge.org/projects/ruwiki/ )
+colored ( http://errtheblog.com/ )
 
 == Installation
 
