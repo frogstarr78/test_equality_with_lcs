@@ -44,7 +44,7 @@ colored ( http://errtheblog.com/ )
 == Installation
 
 1. Require the gem
-2. Install the Diff-LCS gem (http://rubyforge.org/projects/ruwiki/)
+2. Install the dependant gems
 2. Require the necessary lib for your framework
 3. include the appropriate module for your testing framework
 
