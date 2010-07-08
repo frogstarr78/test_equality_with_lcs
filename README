@@ -8,7 +8,7 @@ Let's say you want to test two strings:
 
 *Unit tests*:
 class ClassName < Test::Unit::TestCase
-  include TestWithLCS::Unit
+  include TestEqualityWithLCS::Unit
 
   def test_something
 	assert_equal_with_lcs @string1, @string2
